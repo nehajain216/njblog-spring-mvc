@@ -25,4 +25,10 @@ public class Service {
 		iterable.iterator().forEachRemaining(allPosts::add);
 		return allPosts;
 	}
+	
+	public Post getPostByPostId(int postId)
+	{
+		Post post = dao.findOne(postId);
+		return post;
+	}
 }
