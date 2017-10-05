@@ -1,5 +1,7 @@
 package com.nj.njblog.entities;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -75,6 +77,18 @@ public class Comment {
 
 	public void setPost(Post post) {
 		this.post = post;
+	}
+	
+	public String getFormatedDate() {
+		DateFormat df = new SimpleDateFormat("MMMM dd, yyyy");
+		String formattedDate = df.format(createdOn);
+		return formattedDate;
+	}
+
+	@Override
+	public String toString() {
+		return "Comment [id=" + id + ", content=" + content + ", name=" + name + ", email=" + email + ", createdOn="
+				+ createdOn + ", post=" + post + "]";
 	}
 
 }

@@ -4,14 +4,17 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -28,6 +31,7 @@ public class Post {
 	
 	private String title;
 	
+	@Lob
 	private String content;
 	
 	@Column(name = "created_on")
@@ -42,16 +46,16 @@ public class Post {
 	@JoinColumn(name="category_id")
 	private Category category;
 	
-	@OneToMany(mappedBy="post")
+	@OneToMany(mappedBy="post", fetch=FetchType.EAGER)
 	private List<Comment> comments;
 	
-	@ManyToMany
+	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name="posts_tags",
         joinColumns=
             @JoinColumn(name="post_id", referencedColumnName="ID"),
         inverseJoinColumns=
             @JoinColumn(name="tag_id", referencedColumnName="ID"))
-	private List<Tag> tags;
+	private Set<Tag> tags;
 
 	public int getId() {
 		return id;
@@ -109,11 +113,11 @@ public class Post {
 		this.category = category;
 	}
 
-	public List<Tag> getTags() {
+	public Set<Tag> getTags() {
 		return tags;
 	}
 
-	public void setTags(List<Tag> tags) {
+	public void setTags(Set<Tag> tags) {
 		this.tags = tags;
 	}
 
@@ -133,5 +137,13 @@ public class Post {
 		String formattedDate = df.format(createdOn);
 		return formattedDate;
 	}
+
+	@Override
+	public String toString() {
+		return "Post [id=" + id + ", title=" + title + ", content=" + content + ", createdOn=" + createdOn
+				+ ", createdBy=" + createdBy + ", category=" + category + ", comments=" + comments + ", tags=" + tags
+				+ "]";
+	}
+	
 
 }
