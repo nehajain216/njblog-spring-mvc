@@ -76,4 +76,10 @@ public class BlogService {
 	{
 		commentRepository.save(comment);
 	}
+	
+	public void deletePost(int postId)
+	{
+		Post post = postRepository.findOne(postId);
+		postRepository.delete(post);
+	}
 }

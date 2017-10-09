@@ -23,6 +23,8 @@ import com.nj.njblog.entities.Tag;
 import com.nj.njblog.entities.User;
 import com.nj.njblog.services.BlogService;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
+
 @Controller
 public class HomeController {
 
@@ -107,6 +109,23 @@ public class HomeController {
 		blogService.updatePost(post);
 		return "redirect:/viewpost/"+post.getId();
 	}
+	
+	@GetMapping("/admin")
+	public String adminPage(Model model)
+	{
+		List<Post> posts = blogService.getListOfAllPosts();
+		model.addAttribute("posts", posts);
+		return "admin";
+	}
+	
+	@PostMapping("/admin")
+	public String deletePost(@RequestParam("postId") String postId )
+	{
+		System.out.println("post to be deleted"+postId);
+		blogService.deletePost(Integer.parseInt(postId));
+		return "redirect:/admin";
+	}
+	
 
 	@ModelAttribute("tagList")
 	public List<Tag> getTagList() {

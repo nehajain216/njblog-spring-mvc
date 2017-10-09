@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -46,7 +47,7 @@ public class Post {
 	@JoinColumn(name="category_id")
 	private Category category;
 	
-	@OneToMany(mappedBy="post", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="post", fetch=FetchType.EAGER, cascade={CascadeType.PERSIST,CascadeType.REMOVE})
 	private List<Comment> comments;
 	
 	@ManyToMany(fetch=FetchType.EAGER)

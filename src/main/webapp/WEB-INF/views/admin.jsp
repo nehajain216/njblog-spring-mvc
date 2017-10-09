@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!DOCTYPE>
 <html>
 <head>
@@ -9,16 +10,21 @@
 <body>
 
 	<%@include file="topnav.jsp"%>
+
 	<div class="container">
 		<div id="posts">
 			<c:forEach var="post" items="${posts}">
 				<div class="well well-lg">
-					<h3>
-						<a href="viewpost/${post.id}">${post.title}</a>
-					</h3>
-					<p>
-					<a href="">Delete</a>
-					</p>
+					<div>
+						<h3>
+							<a href="viewpost/${post.id}">${post.title}</a>
+						</h3>
+						<c:url value="/admin" var="deletePost"></c:url>
+						<form action="${deletePost}" method="POST">
+							<input name="postId" type="hidden" value="${post.id}" /> <input
+								type="submit" value="delete" onClick="return confirm('Are you sure you want to delete this Post?')" />
+						</form>
+					</div>
 				</div>
 			</c:forEach>
 		</div>
