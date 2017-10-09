@@ -67,6 +67,11 @@ public class BlogService {
 		postRepository.save(post);
 	}
 	
+	public void updatePost(Post post)
+	{
+		postRepository.updateByPostId(post.getTitle(), post.getContent(), post.getId(), post.getCategory());
+	}
+	
 	public void saveComment(Comment comment)
 	{
 		commentRepository.save(comment);

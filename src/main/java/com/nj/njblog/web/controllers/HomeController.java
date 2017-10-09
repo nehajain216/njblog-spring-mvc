@@ -41,24 +41,7 @@ public class HomeController {
 		return "home";
 	}
 
-	@GetMapping(value = "/viewpost/{id}")
-	public String viewPost(@PathVariable("id") int postId, Model model) {
-		Post post = blogService.getPostByPostId(postId);
-		model.addAttribute("post", post);
-		model.addAttribute("comment", new Comment());
-		return "viewpost";
-	}
 	
-	@PostMapping(value="/viewpost")
-	public String addComment(@ModelAttribute("comment")Comment comment, @RequestParam("postId") String postId )
-	{
-		comment.setCreatedOn(new Date());
-		Post post=new Post();
-		post.setId(Integer.parseInt(postId));
-		comment.setPost(post);
-		blogService.saveComment(comment);
-		return "redirect:/viewpost/"+postId;
-	}
 
 	@GetMapping("/addpost")
 	public String addPost(Model model) {
@@ -82,13 +65,55 @@ public class HomeController {
 		blogService.savePost(post);
 		return "redirect:/home";
 	}
+	
+	@GetMapping(value = "/viewpost/{id}")
+	public String viewPost(@PathVariable("id") int postId, Model model) {
+		Post post = blogService.getPostByPostId(postId);
+		model.addAttribute("post", post);
+		model.addAttribute("comment", new Comment());
+		return "viewpost";
+	}
+	
+	@PostMapping(value="/viewpost")
+	public String addComment(@ModelAttribute("comment")Comment comment, @RequestParam("postId") String postId )
+	{
+		comment.setCreatedOn(new Date());
+		Post post=new Post();
+		post.setId(Integer.parseInt(postId));
+		comment.setPost(post);
+		blogService.saveComment(comment);
+		return "redirect:/viewpost/"+postId;
+	}
+	
+	@GetMapping("/editpost/{id}")
+	public String editPost(@PathVariable("id") int postId, Model model)
+	{
+		Post post = blogService.getPostByPostId(postId);
+		List<Integer> selectedTags = new ArrayList<Integer>();
+		for(Tag tag : post.getTags())
+		{
+			selectedTags.add(tag.getId());
+		}
+		System.out.println("Selected Tags"+selectedTags);
+		model.addAttribute("post", post);
+		model.addAttribute("tags", selectedTags);
+		return "editpost";
+	}
+	
+	@PostMapping("/editpost")
+	public String updatePost(@ModelAttribute("post")Post post)
+	{
+		System.out.println(post);
+		blogService.updatePost(post);
+		return "redirect:/viewpost/"+post.getId();
+	}
 
 	@ModelAttribute("tagList")
 	public List<Tag> getTagList() {
 		List<Tag> allTags = blogService.getAllTags();
 		return allTags;
 	}
-
+	
 	@ModelAttribute("categoryList")
 	public Map<Integer, String> getCategoryList() {
 		List<Category> allCategories = blogService.getAllCategories();

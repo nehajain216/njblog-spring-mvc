@@ -17,7 +17,10 @@
 				<li><a href="/njblog-spring-mvc/addpost">New Post</a></li>
 				<li><a href="#about">About</a></li>
 				<li><a href="#contact">Contact</a></li>
+				<li><a href="#contact">Admin</a></li>
 			</ul>
+
 		</div>
+
 	</div>
 </nav>

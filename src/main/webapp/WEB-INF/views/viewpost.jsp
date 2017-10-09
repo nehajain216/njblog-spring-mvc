@@ -14,14 +14,14 @@
 	<div class="container">
 		<div id="posts">
 			<div class="well well-lg">
-				<h3>
-					<a href="#">${post.title}</a>
-				</h3>
+				<div>
+					<h3><span>${post.title}</span></h3>
+					<p align="right"><a href='<c:url value="/editpost/${post.id}"></c:url>'>Edit</a></p>
+				</div>
 				<p>
 					<span class="glyphicon glyphicon-calendar">${post.formatedDate}</span>
 				</p>
 				<p>${post.content}</p>
-
 			</div>
 			<div class="well well-lg">
 				<p>
