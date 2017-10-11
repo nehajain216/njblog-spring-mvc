@@ -22,13 +22,16 @@ public class Comment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
+	
 	private String content;
+	
 	private String name;
+	
 	private String email;
 	@Column(name = "created_on")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdOn;
-	@ManyToOne(cascade={CascadeType.PERSIST,CascadeType.REMOVE})
+	@ManyToOne(cascade={CascadeType.MERGE,CascadeType.REMOVE})
 	@JoinColumn(name = "post_id")
 	private Post post;
 

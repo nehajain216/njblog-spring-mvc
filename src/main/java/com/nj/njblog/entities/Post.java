@@ -3,6 +3,7 @@ package com.nj.njblog.entities;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -23,16 +24,19 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 @Entity
 @Table(name = "posts")
 public class Post {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	
+	@NotBlank
 	private String title;
 	
 	@Lob
+	@NotBlank
 	private String content;
 	
 	@Column(name = "created_on")
@@ -45,18 +49,20 @@ public class Post {
 	
 	@ManyToOne
 	@JoinColumn(name="category_id")
+	
 	private Category category;
 	
-	@OneToMany(mappedBy="post", fetch=FetchType.EAGER, cascade={CascadeType.PERSIST,CascadeType.REMOVE})
+	@OneToMany(mappedBy="post", fetch=FetchType.EAGER, cascade={CascadeType.MERGE,CascadeType.REMOVE})
 	private List<Comment> comments;
 	
-	@ManyToMany(fetch=FetchType.EAGER)
+	
+	@ManyToMany(fetch=FetchType.LAZY)
 	@JoinTable(name="posts_tags",
         joinColumns=
             @JoinColumn(name="post_id", referencedColumnName="ID"),
         inverseJoinColumns=
             @JoinColumn(name="tag_id", referencedColumnName="ID"))
-	private Set<Tag> tags;
+	private Set<Tag> tags = new HashSet<Tag>();
 
 	public int getId() {
 		return id;
@@ -146,5 +152,13 @@ public class Post {
 				+ "]";
 	}
 	
+	public boolean hasTag(int tagId){
+		for (Tag tag : tags) {
+			if(tagId == tag.getId()){
+				return true;
+			}
+		}
+		return false;
+	}
 
 }

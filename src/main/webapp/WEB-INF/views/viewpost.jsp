@@ -15,29 +15,44 @@
 		<div id="posts">
 			<div class="well well-lg">
 				<div>
-					<h3><span>${post.title}</span></h3>
-					<p align="right"><a href='<c:url value="/editpost/${post.id}"></c:url>'>Edit</a></p>
+					<h3>
+						<span>${post.title}</span>
+					</h3>
+					<p align="right">
+						<a href='<c:url value="/editpost/${post.id}"></c:url>'>Edit</a>
+					</p>
+
+					<p>
+						<span class="glyphicon glyphicon-calendar">${post.formatedDate}</span>
+					</p>
+					<p>${post.content}</p>
+					<p>
+						Category: <span class="label label-warning">${post.category.name}</span>
+					</p>
+
+					<p>
+						Tags:
+						<c:forEach var="tag" items="${post.tags}">
+							<span class="label label-primary">${tag.name}</span>
+						</c:forEach>
+					</p>
 				</div>
-				<p>
-					<span class="glyphicon glyphicon-calendar">${post.formatedDate}</span>
-				</p>
-				<p>${post.content}</p>
 			</div>
 			<div class="well well-lg">
 				<p>
-					<c:if test="${not empty post.comments}">
-						<c:forEach var="comment" items="${post.comments}">
-							<div class="panel panel-default">
-								<div class="panel-body">
-									<p>
-										<b>${comment.name}</b>
-									</p>
-									<p>${comment.formatedDate}</p>
-									<p>${comment.content}</p>
-								</div>
+
+					<c:forEach var="comment" items="${post.comments}">
+						<div class="panel panel-default">
+							<div class="panel-body">
+								<p>
+									<b>${comment.name}</b>
+								</p>
+								<p>${comment.formatedDate}</p>
+								<p>${comment.content}</p>
 							</div>
-						</c:forEach>
-					</c:if>
+						</div>
+					</c:forEach>
+
 				</p>
 			</div>
 		</div>

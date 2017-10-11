@@ -9,3 +9,6 @@ body {
 #tags {
     width:100%;
 }
+.error {
+         color: #ff0000;
+      }

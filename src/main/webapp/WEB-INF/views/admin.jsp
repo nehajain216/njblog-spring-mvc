@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Home Page</title>
+<title>Admin Page</title>
 <%@include file="include-css-js.jsp"%>
 </head>
 <body>
@@ -21,8 +21,9 @@
 						</h3>
 						<c:url value="/admin" var="deletePost"></c:url>
 						<form action="${deletePost}" method="POST">
-							<input name="postId" type="hidden" value="${post.id}" /> <input
-								type="submit" value="delete" onClick="return confirm('Are you sure you want to delete this Post?')" />
+							<input name="postId" type="text" value="${post.id}" /> <input
+								type="submit" value="delete"
+								onClick="return confirm('Are you sure you want to delete this Post?')" />
 						</form>
 					</div>
 				</div>

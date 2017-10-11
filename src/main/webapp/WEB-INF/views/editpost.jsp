@@ -15,8 +15,10 @@
 		<div class="container">
 			<div id="posts">
 				<div class="well well-lg">
+					<form:input path="id" type="hidden"/>
 					<b>Title* :</b>
 					<form:input path="title" />
+					<form:errors path="title" cssClass="error"></form:errors>
 					<br> <br> <b>Content* :</b>
 					<form:textarea path="content" rows="6" cols="150" />
 					<br> <br> <b>Category*: </b>
@@ -27,9 +29,8 @@
 					<br> <br> <b>Tags*: </b>
 					<c:forEach var="tag" items="${tagList}">
 						<input type="checkbox" name="tagIds" value="${tag.id}"
-							<c:forEach items="${post.tags}" var="selectedTags">
-								<c:if test="${'${selectedTags.id}' eq '${tag.id}'}"> checked</c:if>
-							</c:forEach> /> ${tag.name}
+								<c:if test="${post.hasTag(tag.id)}"> checked</c:if>
+							 /> ${tag.name}
 							</c:forEach>
 					<br> <br> <input type="submit" value="submit">
 				</div>

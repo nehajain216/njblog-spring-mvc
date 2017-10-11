@@ -69,7 +69,12 @@ public class BlogService {
 	
 	public void updatePost(Post post)
 	{
-		postRepository.updateByPostId(post.getTitle(), post.getContent(), post.getId(), post.getCategory());
+		Post postToUpdate = postRepository.findOne(post.getId());
+		postToUpdate.setTitle(post.getTitle());
+		postToUpdate.setContent(post.getContent());
+		postToUpdate.setCategory(post.getCategory());
+		postToUpdate.setTags(post.getTags());
+		postRepository.save(postToUpdate);
 	}
 	
 	public void saveComment(Comment comment)

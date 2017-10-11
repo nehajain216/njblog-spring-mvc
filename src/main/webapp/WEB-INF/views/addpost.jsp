@@ -16,10 +16,12 @@
 			<div id="posts">
 				<div class="well well-lg">
 					<label for="inputTitle" class="control-label">Title* :</label><br>
-					<form:input type="text" path="title" /><br> 
+					<form:input type="text" path="title" />
+					<form:errors path="title" cssClass="error"></form:errors><br> 
 					
 					<label for="inputContent" class="control-label">Content* :</label><br>
-					<form:textarea path="content" rows="6" cols="150" /><br> 
+					<form:textarea path="content" rows="6" cols="150" /> 
+					<form:errors path="content" cssClass="error"></form:errors><br> 
 					
 					<label for="inputCategory" class="control-label">Category:</label>
 					<form:select path="category.id">
@@ -32,7 +34,7 @@
 					<input type="checkbox" name="tagIds" value="${tag.id}"/> ${tag.name}
 					</c:forEach>
 					
-					<input type="submit" value="submit">
+					<br> <input type="submit" value="submit">
 				</div>
 			</div>
 		</div>
