@@ -8,4 +8,5 @@ import com.nj.njblog.entities.Post;
 @Repository
 public interface PostRepository extends PagingAndSortingRepository<Post, Integer>  {
 
+	
 }

@@ -25,6 +25,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "posts")
@@ -32,11 +33,11 @@ public class Post {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	@NotBlank
+	@NotBlank(message="{title.empty}")
 	private String title;
 	
 	@Lob
-	@NotBlank
+	@NotBlank(message="{content.empty}")
 	private String content;
 	
 	@Column(name = "created_on")
@@ -49,7 +50,6 @@ public class Post {
 	
 	@ManyToOne
 	@JoinColumn(name="category_id")
-	
 	private Category category;
 	
 	@OneToMany(mappedBy="post", fetch=FetchType.EAGER, cascade={CascadeType.MERGE,CascadeType.REMOVE})
@@ -153,7 +153,8 @@ public class Post {
 	}
 	
 	public boolean hasTag(int tagId){
-		for (Tag tag : tags) {
+		for (Tag tag : tags) 
+		{
 			if(tagId == tag.getId()){
 				return true;
 			}

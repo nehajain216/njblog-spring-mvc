@@ -11,7 +11,8 @@
 	<%@include file="topnav.jsp"%>
 	<div class="container">
 		<div id="posts">
-			<c:forEach var="post" items="${posts}">
+
+			<c:forEach var="post" items="${postsPage.getContent()}">
 				<div class="well well-lg">
 					<h3>
 						<a href="viewpost/${post.id}">${post.title}</a>
@@ -39,6 +40,23 @@
 				</div>
 			</c:forEach>
 		</div>
+		<nav>
+			<ul class="pager">
+			<c:url value="/home" var="home_url"></c:url>
+			<c:if test="${postsPage.hasPrevious()}">
+				<li class="previous"><a href="${home_url}?pageNo=${postsPage.getNumber()-1}"><span aria-hidden="true">&larr;</span> Newer </a></li>
+			</c:if>
+			<c:if test="${!postsPage.hasPrevious()}">
+				<li class="previous disabled"><a href="#"><span aria-hidden="true">&larr;</span> Newer </a></li>
+			</c:if>
+			<c:if test="${postsPage.hasNext()}">
+				<li class="next"><a href="${home_url}?pageNo=${postsPage.getNumber()+1}">Older <span aria-hidden="true">&rarr;</span></a></li>
+			</c:if>
+			<c:if test="${!postsPage.hasNext()}">
+				<li class="next disabled"><a href="#">Older <span aria-hidden="true">&rarr;</span></a></li>
+			</c:if>
+			</ul>
+		</nav>
 	</div>
 
 </body>

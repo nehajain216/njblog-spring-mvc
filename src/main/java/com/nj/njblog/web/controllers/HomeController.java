@@ -10,6 +10,7 @@ import java.util.Set;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,12 +27,16 @@ import com.nj.njblog.entities.Post;
 import com.nj.njblog.entities.Tag;
 import com.nj.njblog.entities.User;
 import com.nj.njblog.services.BlogService;
+import com.nj.njblog.validators.CategoryValidator;
 
 @Controller
 public class HomeController {
 
 	@Autowired
 	private BlogService blogService;
+	
+	@Autowired
+	CategoryValidator  categoryValidator;
 
 	@GetMapping("/")
 	public String index() {
@@ -39,9 +44,9 @@ public class HomeController {
 	}
 
 	@GetMapping("/home")
-	public String HomePage(Model model) {
-		List<Post> allPosts = blogService.getListOfAllPosts();
-		model.addAttribute("posts", allPosts);
+	public String HomePage(Model model, @RequestParam(name="pageNo", defaultValue="0") int pageNumber) {
+		Page<Post> allPosts = blogService.getListOfAllPosts(pageNumber);
+		model.addAttribute("postsPage", allPosts);
 		return "home";
 	}
 
@@ -54,6 +59,20 @@ public class HomeController {
 	@PostMapping("/addpost")
 	public String savePost(@RequestParam(name = "tagIds", defaultValue = "") String tagIds,
 			@Valid @ModelAttribute("post") Post post, BindingResult bindingResult) {
+		String[] tagIdsStrings = tagIds.split(",");
+		//post.setTags(new HashSet());
+		Set<Tag> tags = new HashSet<>();
+		if(!tagIds.isEmpty())
+		{
+			for (String tagIdStr : tagIdsStrings) {
+				Tag tag = new Tag();
+				tag.setId(Integer.parseInt(tagIdStr));
+				//post.getTags().add(tag);
+				tags.add(tag);
+			}
+			post.setTags(tags);
+		}
+		categoryValidator.validate(post, bindingResult);
 		if (bindingResult.hasErrors()) {
 			return "addpost";
 		}
@@ -61,13 +80,7 @@ public class HomeController {
 		User user = new User();
 		user.setId(1);
 		post.setCreatedBy(user);
-		String[] tagIdsStrings = tagIds.split(",");
-		post.setTags(new HashSet());
-		for (String tagIdStr : tagIdsStrings) {
-			Tag tag = new Tag();
-			tag.setId(Integer.parseInt(tagIdStr));
-			post.getTags().add(tag);
-		}
+		
 		blogService.savePost(post);
 		return "redirect:/home";
 	}
@@ -100,19 +113,21 @@ public class HomeController {
 	@PostMapping("/editpost")
 	public String updatePost(@RequestParam(name="tagIds", defaultValue="") String tagIds,@Valid @ModelAttribute("post") Post post,
 			BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-			System.out.println("error NJ");
-			return "editpost";
-		} else {
-			System.out.println("success NJ");
-			Set<Tag> tags = new HashSet<>();
-			String[] tagIdsArray = tagIds.split(",");
+		Set<Tag> tags = new HashSet<>();
+		String[] tagIdsArray = tagIds.split(",");
+		if(!tagIds.isEmpty())
+		{
 			for (String tagId : tagIdsArray) {
 				Tag tag = new Tag();
 				tag.setId(Integer.parseInt(tagId));
 				tags.add(tag);
 			}
 			post.setTags(tags);
+		}
+		categoryValidator.validate(post, bindingResult);
+		if (bindingResult.hasErrors()) {
+			return "editpost";
+		} else {
 			blogService.updatePost(post);
 			return "redirect:/home";
 		}
@@ -120,8 +135,8 @@ public class HomeController {
 
 	@GetMapping("/admin")
 	public String adminPage(Model model) {
-		List<Post> posts = blogService.getListOfAllPosts();
-		model.addAttribute("posts", posts);
+		/*List<Post> posts = blogService.getListOfAllPosts();
+		model.addAttribute("posts", posts);*/
 		return "admin";
 	}
 
@@ -142,9 +157,9 @@ public class HomeController {
 	public Map<Integer, String> getCategoryList() {
 		List<Category> allCategories = blogService.getAllCategories();
 		Map<Integer, String> categories = new HashMap<Integer, String>();
-		for (Category category : allCategories) {
-			categories.put(category.getId(), category.getName());
-		}
+			for (Category category : allCategories) {
+				categories.put(category.getId(), category.getName());
+			}
 		return categories;
 	}
 
